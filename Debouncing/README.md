@@ -1,15 +1,31 @@
-# Software Debouncing
-In previously labs, we talked about how objects such as switches can cause some nasty effects since they are actually a mechanical system at heart. We talked about the simple hardware method of debouncing, but due to the many different design constraints, you may not be able to add or adjust hardware. Debouncing is also only one of many applications which would require the use of built in Timers to allow for other processes to take place.
+# Nathan Sulzer
+# Embedded Systems
+# Lab 4 
+# Debouncing
+ 
+This code consists of adding a delay between the push of a button and its reading for the purpose of removing useless noise 
 
-## Task
-You need to utilize the TIMER modules within the MSP430 processors to implement a debounced switch to control the state of an LED. You most likely will want to hook up your buttons on the development boards to an oscilloscope to see how much time it takes for the buttons to settle. The idea here is that your processor should be able to run other code, while relying on timers and interrupts to manage the debouncing in the background. You should not be using polling techniques for this assignment. Your code should also be able to detect 
+# Basic Code
+The Code functions by blinking an LED on the microprocessor.
+```c
+#include <msp430g2553.h>
 
-### Hints
-You need to take a look at how the P1IE and P1IES registers work and how to control them within an interrupt routine. Remember that the debouncing is not going to be the main process you are going to run by the end of the lab.
-
-## Extra Work
-### Low Power Modes
-Go into the datasheets or look online for information about the low power modes of your processors and using Energy Trace, see what the lowest power consumption you can achieve while still running your debouncing code. Take a note when your processor is not driving the LED (or unplug the header connecting the LED and check) but running the interrupt routine for your debouncing.
-
-### Double the fun
-Can you expand your code to debounce two switches? Do you have to use two Timer peripherals to do this?
+#define LED1    BIT0    // Defines LED at P1.0
+#define LED2    BIT6    // Defines LED at P1.6
+#define BUTTON  BIT3    // Defines BUTTON at P1.3
+/**
+ * Nathan Sulzer
+ * Into to Embedded Systems
+ * main.c
+ */
+int main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;           // stop watchdog timer
+    P1DIR  = LED1;                      // Set P1.0 RED LED to output
+    while(1)
+    {
+            P1OUT ^= LED1;     // Activate LED 1 RED
+            _delay_cycles( 200000);
+    }
+}
+```
